@@ -33,7 +33,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { mainCategoryConfig } from "@/config/main";
 import { protectedEditorConfig, protectedPostConfig } from "@/config/protected";
 import { postEditFormSchema } from "@/lib/validation/post";
-import { Draft } from "@/types/collection";
+import { Category, Post } from "@/types/collection";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Uppy from "@uppy/core";
@@ -56,18 +56,21 @@ import {
   EditorUploadGalleryImageTableEmpty,
 } from "./upload";
 import { defaultEditorContent } from "./wysiwyg/default-content";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const dynamic = "force-dynamic";
 
 type FormData = z.infer<typeof postEditFormSchema>;
 
 interface EditorProps {
-  post: Draft;
+  post: Post;
   userId: string;
   coverImageFileName: string;
   coverImagePublicUrl: string;
   galleryImageFileNames: string[];
   galleryImagePublicUrls: string[];
+  categories: Category[];
+  accessToken: string;
 }
 
 type EditorFormValues = z.infer<typeof postEditFormSchema>;
@@ -79,6 +82,8 @@ const Editor: FC<EditorProps> = ({
   coverImagePublicUrl,
   galleryImageFileNames,
   galleryImagePublicUrls,
+  categories,
+  accessToken
 }) => {
   const router = useRouter();
 
@@ -89,7 +94,7 @@ const Editor: FC<EditorProps> = ({
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
   const [showCoverModal, setShowCoverModal] = useState<boolean>(false);
   const [showGalleryModal, setShowGalleryModal] = useState<boolean>(false);
-
+  const [content_html, setContent_html] = useState<string | null>(post?.content_html || null);
   // Editor
   const [saveStatus, setSaveStatus] = useState("Saved");
 
@@ -104,7 +109,7 @@ const Editor: FC<EditorProps> = ({
   const bucketNameGalleryImage =
     process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_GALLERY_IMAGE ||
     "gallery-image";
-  const token = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const token = accessToken;
   const projectId = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID;
   const supabaseUploadURL = `https://${projectId}.supabase.co/storage/v1/upload/resumable`;
 
@@ -145,6 +150,15 @@ const Editor: FC<EditorProps> = ({
   uppyCover.on("complete", async (result) => {
     if (result.successful.length > 0) {
       toast.success(protectedEditorConfig.successMessageImageUpload);
+      // Get the public URL of the uploaded image
+      const uploadedFile = result.successful[0];
+      // Assuming you can construct the public URL from the file object
+      // You might need to adjust this based on how Supabase returns the public URL or how you construct it.
+      // A common pattern is: `https://[PROJECT_ID].supabase.co/storage/v1/object/public/[BUCKET_NAME]/[OBJECT_NAME]`
+      const publicUrl = `https://${projectId}.supabase.co/storage/v1/object/public/${bucketNameCoverImage}/${uploadedFile.meta.objectName}`;
+
+      form.setValue("image", publicUrl); // <--- Add this line to update the form field
+
       router.refresh();
     } else {
       toast.error(protectedEditorConfig.errorMessageImageUpload);
@@ -204,6 +218,7 @@ const Editor: FC<EditorProps> = ({
     categoryId: post.category_id ?? protectedEditorConfig.defaultCategoryId,
     description: post.description ?? "Post description",
     content: content ?? protectedEditorConfig.placeholderContent,
+    content_html:post.content_html ?? ""
   };
 
   const form = useForm<EditorFormValues>({
@@ -215,7 +230,7 @@ const Editor: FC<EditorProps> = ({
   async function onSubmit(data: EditorFormValues) {
     setShowLoadingAlert(true);
     setIsSaving(true);
-
+    
     const response = await UpdatePost({
       id: post.id,
       title: data.title,
@@ -224,6 +239,7 @@ const Editor: FC<EditorProps> = ({
       description: data.description,
       content: content,
       categoryId: data.categoryId,
+      content_html:content_html
     });
 
     if (response) {
@@ -316,30 +332,23 @@ const Editor: FC<EditorProps> = ({
                 control={form.control}
                 name="categoryId"
                 render={({ field }) => (
-                  <FormItem className="space-y-3">
+                  <FormItem>
                     <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        {mainCategoryConfig.map(
-                          (category) =>
-                            category.slug !== "/" && (
-                              <FormItem
-                                key={v4()}
-                                className="flex items-center space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <RadioGroupItem value={category.id} />
-                                </FormControl>
-                                <FormLabel className="font-normal">
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[500px] font-sans overflow-y-auto">
+                          {categories.map(
+                            (category) =>
+                              category.slug !== "/" && (
+                                <SelectItem key={category.id} value={category.id}>
                                   {category.title}
-                                </FormLabel>
-                              </FormItem>
-                            ),
-                        )}
-                      </RadioGroup>
+                                </SelectItem>
+                              ),
+                          )}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -509,7 +518,8 @@ const Editor: FC<EditorProps> = ({
           <WysiwygEditor
             defaultValue={content ? JSON.parse(content) : defaultEditorContent}
             onDebouncedUpdate={(editor) => {
-              setContent(JSON.stringify(editor?.getJSON()));
+              setContent(JSON.stringify(editor?.getJSON())); // For editor
+              setContent_html(JSON.stringify(editor?.getHTML())); // For display
             }}
           />
 

@@ -5,17 +5,26 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { FC } from "react";
 import { ReadTimeResults } from "reading-time";
+function splitCombinedUrls(url) {
+  const parts = url.split('https://');
+
+  // Filter out any empty string and add "https://" prefix back
+  const urls = parts
+    .filter(part => part.trim() !== '')
+    .map(part => 'https://' + part);
+
+  return urls;
+}
 
 async function getPublicImageUrl(postId: string, fileName: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const bucketName =
-    process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_POSTS || "posts";
+    process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_COVER_IMAGE || "cover-image";
   const { data } = supabase.storage
     .from(bucketName)
     .getPublicUrl(`${postId}/${fileName}`);
-
-  if (data && data.publicUrl) return data.publicUrl;
+  if (data && data.publicUrl) data.publicUrl;
 
   return "/images/not-found.jpg";
 }
@@ -45,7 +54,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
     <section className="flex flex-col items-start justify-between">
       <div className="relative w-full">
         <Image
-          src={await getPublicImageUrl(id, image)}
+          src={image}
           alt={title}
           width={512}
           height={288}

@@ -176,7 +176,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   image={post.image as string}
                   authorName={post.profiles.full_name as string}
                   authorImage={post.profiles.avatar_url as string}
-                  date={format(parseISO(post.updated_at!), "MMMM dd, yyyy")}
+                  date={post.updated_at != null ? format(parseISO(post.updated_at!), "MMMM dd, yyyy") : ""}
                   category={post.categories?.title as string}
                   readTime={readTime as ReadTimeResults}
                 />
@@ -198,7 +198,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <div className="relative mx-auto max-w-3xl border-slate-500/50 py-5">
                 <div
                   className="lg:prose-md prose"
-                  dangerouslySetInnerHTML={{ __html: post.content || "" }}
+                  dangerouslySetInnerHTML={{ __html: post.content_html || "" }}
                 />
               </div>
               <div className="mx-auto mt-10">
@@ -225,4 +225,14 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
     </>
   );
+}
+function splitCombinedUrls(url) {
+  const parts = url.split('https://');
+
+  // Filter out any empty string and add "https://" prefix back
+  const urls = parts
+    .filter(part => part.trim() !== '')
+    .map(part => 'https://' + part);
+
+  return urls;
 }

@@ -4,7 +4,7 @@ import PostTableTitle from "@/components/protected/post/post-table-title";
 import { columns } from "@/components/protected/post/table/columns";
 import { DataTable } from "@/components/protected/post/table/data-table";
 import { protectedPostConfig } from "@/config/protected";
-import { Draft } from "@/types/collection";
+import { Post } from "@/types/collection";
 import type { Database } from "@/types/supabase";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata } from "next";
@@ -33,11 +33,11 @@ const PostsPage: FC<PostsPageProps> = async ({ searchParams }) => {
 
   // Fetch posts
   const { data, error } = await supabase
-    .from("drafts")
+    .from("posts")
     .select(`*, categories(*)`)
     .order("created_at", { ascending: false })
     .match({ author_id: user?.id })
-    .returns<Draft[]>();
+    .returns<Post[]>();
 
   if (!data || error || !data.length) {
     notFound;

@@ -1,13 +1,12 @@
 import Editor from "@/components/protected/editor/editor";
 import { Separator } from "@/components/ui/separator";
 import { protectedEditorConfig } from "@/config/protected";
-import { Draft } from "@/types/collection";
+import { Category, Post } from "@/types/collection";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 export const revalidate = 0;
-
 interface PostEditorPageProps {
   params: { postId: string };
 }
@@ -26,17 +25,17 @@ async function getUserId() {
     return null;
   }
 
-  return session ? session.user.id : null;
+  return session ? session : null;
 }
 
 async function getPost(postId: string, userId: string) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const { data, error } = await supabase
-    .from("drafts")
+    .from("posts")
     .select("*")
     .match({ id: postId, author_id: userId })
-    .single<Draft>();
+    .single<Post>();
 
   if (error) {
     console.log("Error has occured while getting post data");
@@ -115,6 +114,23 @@ async function getGalleryImageFileNames(bucketName: string, userId, postId) {
   return null;
 }
 
+async function getCategories() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('title', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching categories:', error)
+    return []
+  }
+
+  return data as Category[]
+}
+
 async function getGalleryImageUrls(
   bucketName: string,
   userId: string,
@@ -141,17 +157,17 @@ export default async function PostEditorPage({ params }: PostEditorPageProps) {
   const bucketNameGalleryImage =
     process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_GALLERY_IMAGE!;
   const userId = await getUserId();
-  const post = await getPost(params.postId, userId || "");
+  const post = await getPost(params.postId, userId?.user.id || "");
 
   // Cover image setup
   const coverImageFileName = await getCoverImageFileName(
     bucketNameCoverImage,
-    userId || "",
+    userId?.user.id || "",
     params.postId,
   );
   const coverImagePublicUrl = await getCoverImageUrl(
     bucketNameCoverImage,
-    userId || "",
+    userId?.user.id || "",
     params.postId,
     coverImageFileName || "",
   );
@@ -164,13 +180,13 @@ export default async function PostEditorPage({ params }: PostEditorPageProps) {
   );
   const galleryImagePublicUrls = await getGalleryImageUrls(
     bucketNameGalleryImage,
-    userId || "",
+    userId?.user.id || "",
     params.postId,
     galleryImageFileNames || [],
   );
-
+  const categories = await getCategories();
   if (!post) {
-    return notFound;
+    return notFound();
   }
 
   return (
@@ -183,8 +199,10 @@ export default async function PostEditorPage({ params }: PostEditorPageProps) {
       </div>
       <Separator className="mb-5 max-w-2xl" />
       <Editor
+        categories={categories}
         post={post}
-        userId={userId || ""}
+        userId={userId?.user.id || ""}
+        accessToken={userId?.access_token || ""}
         coverImageFileName={coverImageFileName || ""}
         coverImagePublicUrl={coverImagePublicUrl || ""}
         galleryImageFileNames={galleryImageFileNames || []}

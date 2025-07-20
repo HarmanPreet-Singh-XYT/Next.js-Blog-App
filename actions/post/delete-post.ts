@@ -13,7 +13,7 @@ export async function DeletePost(context: z.infer<typeof postDeleteSchema>) {
     const post = postDeleteSchema.parse(context);
 
     const { data, error } = await supabase
-      .from("drafts")
+      .from("posts")
       .delete()
       .match({ id: post.id, author_id: post.user_id })
       .select();

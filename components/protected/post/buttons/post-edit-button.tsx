@@ -1,4 +1,5 @@
 import { DeletePost } from "@/actions/post/delete-post";
+import { PublishPost } from "@/actions/post/publish-post";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -81,6 +82,29 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
     }
   }
 
+  // Publish
+  async function publishMyPost() {
+    setShowLoadingAlert(true);
+    if (id && session?.user.id) {
+      const myPostData = {
+        id: id,
+        published: true,
+      };
+      const response = await PublishPost(myPostData);
+      if (response) {
+        setShowLoadingAlert(false);
+        toast.success(protectedPostConfig.successPostPublished);
+        router.refresh();
+      } else {
+        setShowLoadingAlert(false);
+        toast.error(protectedPostConfig.errorUpdate);
+      }
+    } else {
+      setShowLoadingAlert(false);
+      toast.error(protectedPostConfig.errorUpdate);
+    }
+  }
+
   return (
     <>
       <DropdownMenu>
@@ -89,6 +113,13 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="font-sans">
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center text-blue-400 focus:text-blue-600"
+            onSelect={publishMyPost}
+          >
+            {protectedPostConfig.publish}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <a
               className="flex w-full"

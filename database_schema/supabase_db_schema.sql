@@ -23,6 +23,26 @@ create table
   ) tablespace pg_default;
 
   create table
+  public.posts (
+    id uuid not null default gen_random_uuid (),
+    category_id uuid null,
+    title text null,
+    image text null,
+    description text null,
+    content text null,
+    created_at timestamp with time zone null default now(),
+    updated_at timestamp with time zone null,
+    slug text null default ''::text,
+    author_id uuid null,
+    published boolean null default false,
+    constraint post_pkey primary key (id),
+    constraint post_id_key unique (id),
+    constraint post_slug_key unique (slug),
+    constraint posts_author_id_fkey foreign key (author_id) references profiles (id),
+    constraint posts_category_id_fkey foreign key (category_id) references categories (id)
+  ) tablespace pg_default;
+
+  create table
   public.comments (
     id uuid not null default gen_random_uuid (),
     comment text null default ''::text,
@@ -42,26 +62,6 @@ create table
     constraint bookmarks_pkey primary key (id),
     constraint bookmarks_id_fkey foreign key (id) references posts (id) on delete cascade,
     constraint bookmarks_user_id_fkey foreign key (user_id) references auth.users (id) on delete cascade
-  ) tablespace pg_default;
-
-  create table
-  public.posts (
-    id uuid not null default gen_random_uuid (),
-    category_id uuid null,
-    title text null,
-    image text null,
-    description text null,
-    content text null,
-    created_at timestamp with time zone null default now(),
-    updated_at timestamp with time zone null,
-    slug text null default ''::text,
-    author_id uuid null,
-    published boolean null default false,
-    constraint post_pkey primary key (id),
-    constraint post_id_key unique (id),
-    constraint post_slug_key unique (slug),
-    constraint posts_author_id_fkey foreign key (author_id) references profiles (id),
-    constraint posts_category_id_fkey foreign key (category_id) references categories (id)
   ) tablespace pg_default;
 
 create trigger handle_updated_at before
