@@ -1,8 +1,12 @@
-
-import React from 'react';
 import { GetBookmark } from "@/actions/bookmark/get-bookmark";
+import {
+  DetailPostComment,
+  DetailPostFloatingBar,
+  DetailPostHeading,
+} from "@/components/detail/post";
+import { DetailPostScrollUpButton } from "@/components/detail/post/buttons";
 import { seoData } from "@/config/root/seo";
-import { getMinutes, getOgImageUrl, getUrl } from "@/lib/utils";
+import { getOgImageUrl, getUrl } from "@/lib/utils";
 import {
   CommentWithProfile,
   PostWithCategoryWithProfile,
@@ -12,10 +16,10 @@ import { createClient } from "@/utils/supabase/server";
 import { format, parseISO } from "date-fns";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound, redirect, useRouter } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import readingTime, { ReadTimeResults } from "reading-time";
 import { cache } from "react";
-import { BlogDetailComments, BlogDetailHeader } from '../../../blogcomp';
+
 export const revalidate = 3600; // Revalidate every hour instead of on every request
 
 interface PostPageProps {
@@ -239,6 +243,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   }
 }
 
+// Enhanced main component
 export default async function PostPage({ params }: PostPageProps) {
   try {
     // Validate params
@@ -264,60 +269,80 @@ export default async function PostPage({ params }: PostPageProps) {
         ? format(parseISO(post.created_at), "MMMM dd, yyyy")
         : "";
 
-    const data:PostData = {
-        post,
-        comments,
-        readTime,
-        isBookmarked,
-        userSession
-    }
-  return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Hero Section */}
-      <div className="relative">
-        <img 
-          src={post.image as string} 
-          alt={post.title as string}
-          className="w-full h-96 object-cover"
-        />
-        <div className="absolute inset-0 bg-black/50"></div>
-      </div>
+    return (
+      <div className="min-h-full bg-gray-100 py-3">
+        <div className="mx-auto max-w-7xl px-0 sm:px-8">
+          <div className="mx-auto max-w-4xl">
+            <article className="mx-auto max-w-4xl rounded-lg bg-white px-6 py-4 shadow-sm shadow-gray-300 ring-1 ring-black/5 sm:px-14 sm:py-10">
+              <div className="relative mx-auto max-w-4xl py-2">
+                {/* Post Heading */}
+                <DetailPostHeading
+                  id={post.id}
+                  title={post.title || "Untitled Post"}
+                  image={post.image || ""}
+                  authorName={post.profiles?.full_name || "Unknown Author"}
+                  authorImage={post.profiles?.avatar_url || ""}
+                  date={formattedDate}
+                  category={post.categories?.title || "General"}
+                  readTime={readTime}
+                />
+                
+                {/* Top Floating Bar */}
+                <div className="mx-auto">
+                  <DetailPostFloatingBar
+                    id={post.id}
+                    title={post.title || "Untitled Post"}
+                    text={post.description || ""}
+                    url={postUrl}
+                    totalComments={comments?.length || 0}
+                    isBookmarked={isBookmarked}
+                  />
+                </div>
+              </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
-        {/* Article Header */}
-        <BlogDetailHeader date={formattedDate} data={data}/>
-
-        {/* Article Content */}
-        <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-lg p-8 mb-8 shadow-lg">
-          <div className="prose prose-lg prose-invert max-w-none">
-            {/* Post Content */}
-              <main className="relative mx-auto border-slate-500/50 py-5">
+              {/* Post Content */}
+              <main className="relative mx-auto max-w-3xl border-slate-500/50 py-5">
                 {post.content_html ? (
                   <div
-                    className="prose prose-lg max-w-none prose-invert"
+                    className="lg:prose-md prose prose-gray max-w-none"
                     dangerouslySetInnerHTML={{ __html: post.content_html }}
-                />
+                  />
                 ) : (
-                  <div className="text-gray-300 italic">
+                  <div className="text-gray-500 italic">
                     No content available for this post.
                   </div>
                 )}
               </main>
+
+              {/* Bottom Floating Bar */}
+              <div className="mx-auto mt-10">
+                <DetailPostFloatingBar
+                  id={post.id}
+                  title={post.title || "Untitled Post"}
+                  text={post.description || ""}
+                  url={postUrl}
+                  totalComments={comments?.length || 0}
+                  isBookmarked={isBookmarked}
+                />
+              </div>
+            </article>
+
+            {/* Comments Section */}
+            <DetailPostComment
+              postId={post.id}
+              comments={comments}
+            />
           </div>
         </div>
-
-        {/* Comments Section */}
-            <BlogDetailComments post={post} user={userSession} comments={comments}/>
-          <div className='h-16'></div>
+        
+        {/* Scroll to Top Button */}
+        <DetailPostScrollUpButton />
       </div>
-    </div>
-  );
+    );
   } catch (error) {
     console.error("Unexpected error in PostPage:", error);
     
     // Fallback error handling - redirect to a generic error page or show not found
     notFound();
   }
-};
-
+}

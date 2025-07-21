@@ -7,14 +7,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { detailCommentConfig } from "@/config/detail";
 import { commentFormSchema } from "@/lib/validation/comment";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SendIcon, Loader2 as SpinnerIcon } from "lucide-react";
+import { Send, Loader2 as SpinnerIcon } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -60,6 +59,7 @@ const DetailPostCommentForm: React.FC<DetailPostCommentFormProps> = ({
     if (response) {
       setIsLoading(false);
       toast.success(detailCommentConfig.successAdd);
+      form.reset(); // Reset form after successful submission
       router.refresh();
     } else {
       setIsLoading(false);
@@ -69,33 +69,42 @@ const DetailPostCommentForm: React.FC<DetailPostCommentFormProps> = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="comment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{detailCommentConfig.title}</FormLabel>
-              <FormControl>
-                <Textarea {...field} className="bg-white" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="group flex items-center justify-center rounded-lg bg-gradient-to-t from-gray-200 via-gray-100 to-gray-50 p-2 text-gray-400 shadow-md shadow-black/5 ring-1 ring-black/10 transition duration-200 hover:bg-gradient-to-tr hover:from-gray-200 hover:via-gray-100 hover:to-gray-50 active:scale-[96%] active:ring-black/20"
-        >
-          {isLoading ? (
-            <SpinnerIcon className="mr-2 h-4 w-4 animate-spin text-gray-600" />
-          ) : (
-            <SendIcon className="mr-2 h-4 w-4 text-gray-600" />
-          )}
-          <span className="text-gray-600">{detailCommentConfig.submit}</span>
-        </Button>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-8">
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <textarea
+                      {...field}
+                      placeholder="Share your thoughts..."
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-400 resize-none focus:border-emerald-500 focus:outline-none"
+                      rows={3}
+                    />
+                  </FormControl>
+                  <FormMessage className="mt-2" />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-end mt-3">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="bg-emerald-500 hover:bg-emerald-600 text-black px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {isLoading ? (
+                  <SpinnerIcon className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                Post Comment
+              </button>
+            </div>
+          </div>
+        </div>
       </form>
     </Form>
   );

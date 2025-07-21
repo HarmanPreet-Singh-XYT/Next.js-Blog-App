@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { mainNewsLetterConfig } from "@/config/main";
 import { emailSchema } from "@/lib/validation/contact";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 as SpinnerIcon } from "lucide-react";
+import { Loader2 as SpinnerIcon, ArrowRight } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -19,6 +19,7 @@ import * as z from "zod";
 
 const MainNewsletter = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const form = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
@@ -47,55 +48,56 @@ const MainNewsletter = () => {
     setIsLoading(false);
     toast.success(mainNewsLetterConfig.success);
     form.reset();
-
     return true;
   }
+
   return (
     <div className="mt-10 xl:mt-0">
-      <h3 className="text-sm font-semibold leading-6 text-gray-900">
-        {mainNewsLetterConfig.title}
-      </h3>
-      <p className="mt-2 text-sm leading-6 text-gray-600">
-        {mainNewsLetterConfig.description}
-      </p>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="mt-6 sm:flex sm:max-w-md"
-        >
-          <label htmlFor="email-address" className="sr-only">
-            {mainNewsLetterConfig.email}
-          </label>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    className="w-full min-w-0 appearance-none rounded-md border-0 bg-white px-3 py-1.5 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:w-64 sm:text-sm sm:leading-6 xl:w-full"
-                    placeholder={mainNewsLetterConfig.email}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
+      <div className="bg-gray-900/40 backdrop-blur-sm border border-gray-700 rounded-lg p-6 hover:border-emerald-500/50 transition-colors duration-300">
+        <h3 className="text-lg font-bold leading-6 text-white mb-2">
+          {mainNewsLetterConfig.title}
+        </h3>
+        <p className="text-sm leading-6 text-gray-400 mb-6">
+          {mainNewsLetterConfig.description}
+        </p>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      className="w-full appearance-none rounded-lg bg-gray-800/50 border border-gray-700 px-4 py-3 text-white placeholder:text-gray-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-all duration-200"
+                      placeholder={mainNewsLetterConfig.email}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-red-400 text-sm mt-1" />
+                </FormItem>
+              )}
+            />
             <button
               disabled={isLoading}
               type="submit"
-              className="flex w-full items-center justify-center rounded-md bg-gray-600 bg-gradient-to-t from-gray-200 via-gray-100 to-gray-50 px-3 py-2 text-sm text-gray-500 shadow-md shadow-sm shadow-black/5 ring-1 ring-black/10 transition duration-200 hover:bg-gray-500 hover:bg-gradient-to-tr hover:from-gray-200 hover:via-gray-100 hover:to-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 active:scale-[96%] active:ring-black/20"
+              className="group w-full flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 hover:shadow-emerald-500/30 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading && (
-                <SpinnerIcon className="mr-2 h-6 w-6 animate-spin" />
+              {isLoading ? (
+                <SpinnerIcon className="h-5 w-5 animate-spin" />
+              ) : (
+                <>
+                  {mainNewsLetterConfig.subscribe}
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </>
               )}
-              {mainNewsLetterConfig.subscribe}
             </button>
-          </div>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 };

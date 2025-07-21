@@ -4,19 +4,19 @@ import {
   MainGrid,
   MainHeader,
 } from "@/components/main";
+import Navbar from "@/components/Navbar/Navbar";
 import { ReactNode } from "react";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <MainBanner />
-      <MainHeader />
+      {/* <MainBanner /> */}
+      <div className="h-16 bg-black"></div>
+      <Navbar currentSection="blog"/>
       <MainGrid>
-        <div className="min-h-full py-10">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-3xl">{children}</div>
-          </div>
-        </div>
+
+            {children}
+
       </MainGrid>
       <MainFooter />
     </>
