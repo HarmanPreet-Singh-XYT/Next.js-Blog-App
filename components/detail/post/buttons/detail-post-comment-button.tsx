@@ -17,22 +17,22 @@ const DetailPostCommentButton: React.FC<DetailPostCommentButtonProps> = ({
   const onMouseLeave = () => setIsHovered(false);
 
   return (
-    <ScrollIntoView selector="#comments" className="flex  w-full">
+    <ScrollIntoView selector="#comments" className="flex w-full">
       <button
         type="button"
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className="group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-black/5 bg-white p-2 hover:bg-gray-50 hover:shadow-sm"
+        className="group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-gray-700 bg-transparent p-2 hover:bg-gray-900 hover:shadow-sm"
       >
         {isHovering ? (
-          <MessageSolidIcon className="-ml-0.5 h-5 w-5 text-gray-900" />
+          <MessageSolidIcon className="-ml-0.5 h-5 w-5 text-gray-100" />
         ) : (
           <MessageOutlineIcon className="-ml-0.5 h-5 w-5 text-gray-400" />
         )}
-        <span className="absolute -right-[5px] -top-[10px] rounded-full bg-white px-[4px] text-xs font-semibold text-gray-500 shadow-sm ring-1 ring-black/5">
+        <span className="absolute -right-[5px] -top-[10px] rounded-full bg-transparent px-[4px] text-xs font-semibold text-gray-400 shadow-sm ring-1 ring-gray-700">
           {totalComments}
         </span>
-        <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-900 md:flex">
+        <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-100 md:flex">
           {detailCommentConfig.comments}
         </span>
       </button>

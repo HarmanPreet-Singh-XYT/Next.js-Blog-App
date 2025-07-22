@@ -1,20 +1,50 @@
 import { SeoType } from "types";
 
 export const seoData: SeoType = {
-  title: "Multi-user, full-stack blogging application",
+  title: "Harmanpreet Singh - Developer Blog",
   subTitle:
-    "Multi-user, full-stack blogging app built with Next.js and Supabase",
-  absoluteTitle: "Next.js | Blog app",
-  ogTitle: "Next.js | Supabase | Blog app",
+    "Personal blog by Harmanpreet Singh - Full Stack Developer sharing insights on web development, mobile apps, and tech",
+  absoluteTitle: "Harmanpreet Singh | Developer Blog",
+  ogTitle: "Harmanpreet Singh | Full Stack Developer Blog",
   author: {
-    name: "Tim",
-    twitterUrl: "https://twitter.com/timtbdev",
-    twitterAddress: "@timtbdev",
+    name: "Harmanpreet Singh",
+    twitterUrl: "https://twitter.com/harmanpreetsingh", // Update with your actual Twitter
+    twitterAddress: "@harmanpreetsingh", // Update with your actual Twitter handle
   },
   description:
-    "Multi-user, Fullstack, Blogging, applicaiton, blog, app, Next.js, Supabase, Supabase Database, Supabase Auth, Supabase Storage, TailwindCSS, TypeScript, Shadcn-ui, Radix-ui, HeadlessUi, NodeMailer, ConvertKit, Vercel OG, React-Hook-Form, React-Drop-Zone, Zod, HeroIcons, Lucide, Novel, Vaul, Uppy",
+    "Personal blog by Harmanpreet Singh, a Full Stack Developer specializing in React, Next.js, Flutter, and Node.js. Sharing tutorials, project insights, and thoughts on modern web and mobile development.",
   keywords: [
-    "Multi-user, Fullstack, Blogging, applicaiton, blog, app, Next.js, Supabase, Supabase Database, Supabase Auth, Supabase Storage, TailwindCSS, TypeScript, Shadcn-ui, Radix-ui, HeadlessUi, NodeMailer, ConvertKit, Vercel OG, React-Hook-Form, React-Drop-Zone, Zod, HeroIcons, Lucide, Novel, Vaul, Uppy",
+    "Harmanpreet Singh",
+    "Full Stack Developer",
+    "Personal Blog",
+    "Web Development",
+    "Mobile Development",
+    "React",
+    "Next.js",
+    "Flutter",
+    "Node.js",
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Programming Tutorials",
+    "Tech Blog",
+    "Software Development",
+    "Frontend Development",
+    "Backend Development",
+    "Cross-platform Development",
+    "Developer Insights",
+    "Coding Tips"
   ],
-  tags: ["Next.js", "Supabase", "TailwindCSS"],
+  tags: [
+    "Personal Blog", 
+    "Full Stack Development", 
+    "React", 
+    "Next.js", 
+    "Flutter", 
+    "Node.js", 
+    "JavaScript", 
+    "TypeScript", 
+    "Web Development", 
+    "Mobile Development"
+  ],
 };

@@ -1,21 +1,21 @@
 
-import React from 'react';
 import { GetBookmark } from "@/actions/bookmark/get-bookmark";
 import { seoData } from "@/config/root/seo";
-import { getMinutes, getOgImageUrl, getUrl } from "@/lib/utils";
+import { getOgImageUrl, getUrl } from "@/lib/utils";
 import {
   CommentWithProfile,
   PostWithCategoryWithProfile,
 } from "@/types/collection";
-import type { Database } from "@/types/supabase";
 import { createClient } from "@/utils/supabase/server";
 import { format, parseISO } from "date-fns";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound, redirect, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import readingTime, { ReadTimeResults } from "reading-time";
 import { cache } from "react";
-import { BlogDetailComments, BlogDetailHeader } from '../../../blogcomp';
+import { BlogDetailComments } from '../../../blogcomp';
+import { BlogDetailHeader } from "@/components/detail/post/BlogDetailHeader";
+import Image from "next/image";
 export const revalidate = 3600; // Revalidate every hour instead of on every request
 
 interface PostPageProps {
@@ -275,9 +275,11 @@ export default async function PostPage({ params }: PostPageProps) {
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
       <div className="relative">
-        <img 
+        <Image 
           src={post.image as string} 
           alt={post.title as string}
+          width={1200} // You need to specify width
+          height={384} // 384px = h-96 (96 * 0.25rem * 16px/rem)
           className="w-full h-96 object-cover"
         />
         <div className="absolute inset-0 bg-black/50"></div>

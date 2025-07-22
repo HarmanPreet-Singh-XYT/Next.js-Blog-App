@@ -1,33 +1,33 @@
 import { getMinutes, shimmer, toBase64 } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/server";
+// import { createClient } from "@/utils/supabase/server";
 import { ArchiveIcon, CalendarIcon, ClockIcon } from "lucide-react";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 import Image from "next/image";
 import { FC } from "react";
 import { ReadTimeResults } from "reading-time";
-function splitCombinedUrls(url) {
-  const parts = url.split('https://');
+// function splitCombinedUrls(url) {
+//   const parts = url.split('https://');
 
-  // Filter out any empty string and add "https://" prefix back
-  const urls = parts
-    .filter(part => part.trim() !== '')
-    .map(part => 'https://' + part);
+//   // Filter out any empty string and add "https://" prefix back
+//   const urls = parts
+//     .filter(part => part.trim() !== '')
+//     .map(part => 'https://' + part);
 
-  return urls;
-}
+//   return urls;
+// }
 
-async function getPublicImageUrl(postId: string, fileName: string) {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const bucketName =
-    process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_COVER_IMAGE || "cover-image";
-  const { data } = supabase.storage
-    .from(bucketName)
-    .getPublicUrl(`${postId}/${fileName}`);
-  if (data && data.publicUrl) data.publicUrl;
+// async function getPublicImageUrl(postId: string, fileName: string) {
+//   const cookieStore = cookies();
+//   const supabase = createClient(cookieStore);
+//   const bucketName =
+//     process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET_COVER_IMAGE || "cover-image";
+//   const { data } = supabase.storage
+//     .from(bucketName)
+//     .getPublicUrl(`${postId}/${fileName}`);
+//   if (data && data.publicUrl) data.publicUrl;
 
-  return "/images/not-found.jpg";
-}
+//   return "/images/not-found.jpg";
+// }
 
 interface DetailPostHeadingProps {
   id: string;

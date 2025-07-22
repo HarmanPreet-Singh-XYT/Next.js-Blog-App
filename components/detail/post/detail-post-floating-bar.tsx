@@ -1,11 +1,9 @@
-"use client";
 
 import {
   DetailPostBookMarkButton,
   DetailPostCommentButton,
   DetailPostShareButton,
 } from "@/components/detail/post/buttons";
-import React from "react";
 
 interface DetailPostFloatingBarProps {
   id: string;

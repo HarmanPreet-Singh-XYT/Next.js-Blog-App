@@ -98,6 +98,8 @@ const DetailPostBookMarkButton: FC<DetailPostBookMarkButtonProps> = ({
     }
   }
 
+  const buttonClassName = "group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-gray-700 bg-transparent py-2 hover:bg-gray-900 hover:shadow-sm";
+
   return (
     <>
       {session &&
@@ -108,14 +110,14 @@ const DetailPostBookMarkButton: FC<DetailPostBookMarkButtonProps> = ({
             onClick={deleteBookmark}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className="group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-black/5 bg-white py-2 hover:bg-gray-50 hover:shadow-sm"
+            className={buttonClassName}
           >
             {isLoading ? (
-              <SpinnerIcon className="-ml-0.5 h-5 w-5 animate-spin" />
+              <SpinnerIcon className="-ml-0.5 h-5 w-5 animate-spin text-gray-400" />
             ) : isHovering ? (
               <BookMarkOutlineIcon className="-ml-0.5 h-5 w-5 text-gray-400" />
             ) : (
-              <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-900" />
+              <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-100" />
             )}
             <span className="ml-2 hidden text-sm text-gray-400 md:flex">
               {isHovering
@@ -130,16 +132,16 @@ const DetailPostBookMarkButton: FC<DetailPostBookMarkButtonProps> = ({
             onClick={addBookmark}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            className="group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-black/5 bg-white py-2 hover:bg-gray-50 hover:shadow-sm"
+            className={buttonClassName}
           >
             {isLoading ? (
-              <SpinnerIcon className="-ml-0.5 h-5 w-5 animate-spin" />
+              <SpinnerIcon className="-ml-0.5 h-5 w-5 animate-spin text-gray-400" />
             ) : isHovering ? (
-              <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-900" />
+              <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-100" />
             ) : (
               <BookMarkOutlineIcon className="-ml-0.5 h-5 w-5 text-gray-400" />
             )}
-            <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-900 md:flex">
+            <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-100 md:flex">
               {detailBookMarkConfig.bookmark}
             </span>
           </button>
@@ -152,19 +154,19 @@ const DetailPostBookMarkButton: FC<DetailPostBookMarkButtonProps> = ({
               disabled={isLoading}
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
-              className="group relative mx-auto inline-flex w-full items-center justify-center rounded-md border border-black/5 bg-white py-2 hover:bg-gray-50 hover:shadow-sm"
+              className={buttonClassName}
             >
               {isHovering ? (
-                <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-900" />
+                <BookMarkSolidIcon className="-ml-0.5 h-5 w-5 text-gray-100" />
               ) : (
                 <BookMarkOutlineIcon className="-ml-0.5 h-5 w-5 text-gray-400" />
               )}
-              <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-900 md:flex">
+              <span className="ml-2 hidden text-sm text-gray-400 group-hover:text-gray-100 md:flex">
                 {detailBookMarkConfig.bookmark}
               </span>
             </button>
           </DialogTrigger>
-          <DialogContent className="font-sans sm:max-w-[425px]">
+          <DialogContent className="font-sans sm:max-w-[425px] bg-transparent border-gray-700">
             <LoginSection />
           </DialogContent>
         </Dialog>
