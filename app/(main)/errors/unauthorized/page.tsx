@@ -1,10 +1,9 @@
 'use client'
 import MainFooter from "@/components/main/footer/main-footer";
-import { sharedNotFoundConfig } from "@/config/shared";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const SharedNotFound = () => {
+const SharedUnauthorized = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [glitchActive, setGlitchActive] = useState(false);
 
@@ -30,13 +29,13 @@ const SharedNotFound = () => {
       <div 
         className="absolute inset-0 opacity-30"
         style={{
-          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(139, 69, 19, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, black 100%)`,
+          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(220, 38, 38, 0.3) 0%, rgba(0, 0, 0, 0.8) 50%, black 100%)`,
         }}
       />
 
       <main className="mx-auto w-full max-w-4xl px-6 pb-16 pt-20 sm:pb-24 lg:px-8 relative z-10">
         <div className="text-center">
-          {/* Main 404 with glitch effect */}
+          {/* Main 401 with glitch effect */}
           <div className="relative inline-block">
             <h1 
               className={`text-8xl sm:text-9xl font-black text-white mb-8 select-none transition-all duration-300 hover:scale-105 ${
@@ -50,14 +49,14 @@ const SharedNotFound = () => {
                 filter: glitchActive ? 'brightness(1.5) contrast(2)' : 'none',
               }}
             >
-              404
+              401
             </h1>
             
             {/* Glitch overlay */}
             {glitchActive && (
               <div className="absolute inset-0 text-8xl sm:text-9xl font-black text-cyan-400 opacity-70 animate-bounce"
                    style={{ transform: 'translate(2px, -2px)' }}>
-                404
+                401
               </div>
             )}
           </div>
@@ -65,10 +64,10 @@ const SharedNotFound = () => {
           {/* Error message with typing animation */}
           <div className="mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 opacity-90">
-              {sharedNotFoundConfig.title || "Page Not Found"}
+              Access Denied
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              {sharedNotFoundConfig.description || "The page you're looking for has vanished into the digital void."}
+              You don{`'`}t have permission to access this resource. Authentication required.
             </p>
           </div>
 
@@ -81,11 +80,18 @@ const SharedNotFound = () => {
                 className="group relative px-8 py-3 bg-white text-black font-semibold rounded-lg transition-all duration-300 hover:bg-transparent hover:text-white hover:scale-110 border-2 border-transparent hover:border-white"
               >
                 <span className="relative z-10">
-                  {sharedNotFoundConfig.back || "Go Home"}
+                  Go Home
                 </span>
                 <div className="absolute inset-0 bg-white opacity-100 group-hover:opacity-0 transition-opacity duration-300 rounded-lg" />
               </Link>
               
+              {/* <Link
+                href="/login"
+                className="px-8 py-3 bg-transparent text-white font-semibold rounded-lg border-2 border-white/30 hover:border-red-500 hover:text-red-500 hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 hover:scale-105"
+              >
+                Login
+              </Link> */}
+
               <button
                 onClick={triggerGlitch}
                 className="px-8 py-3 bg-transparent text-white font-semibold rounded-lg border-2 border-white/30 hover:border-red-500 hover:text-red-500 hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 hover:scale-105"
@@ -105,4 +111,4 @@ const SharedNotFound = () => {
   );
 };
 
-export default SharedNotFound;
+export default SharedUnauthorized;

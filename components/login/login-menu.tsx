@@ -42,11 +42,11 @@ const LoginMenu = () => {
     }
     fetchAvatar();
   }, [session, supabase]);
-
+  const role = session?.user?.user_metadata?.role || session?.user?.app_metadata?.role;
   return (
     <>
       {session ? (
-        <LoginProfileButton profileImageUrl={avatarUrl} />
+        <LoginProfileButton role={role} profileImageUrl={avatarUrl} />
       ) : (
         <LoginButton />
       )}

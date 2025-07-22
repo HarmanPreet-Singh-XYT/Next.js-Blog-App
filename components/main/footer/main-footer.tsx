@@ -12,11 +12,11 @@ const MainFooter = () => {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-8 pt-20 sm:pt-24 lg:pt-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-8 sm:pt-12">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="grid grid-cols-2 gap-8 xl:col-span-2">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
+            <div className="md:grid md:gap-8">
+              {/* <div>
                 <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-400 mb-6">
                   Categories
                 </h3>
@@ -37,7 +37,7 @@ const MainFooter = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </div> */}
               <div className="mt-10 md:mt-0">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-400 mb-6">
                   Pages
@@ -101,7 +101,7 @@ const MainFooter = () => {
         </div>
         
         {/* Glitch effect divider */}
-        <div className="relative mt-16 sm:mt-20 lg:mt-24">
+        <div className="relative mt-12">
           <div className="absolute inset-0 flex items-center" aria-hidden="true">
             <div className="w-full border-t border-gray-800"></div>
           </div>

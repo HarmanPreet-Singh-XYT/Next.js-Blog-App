@@ -1,13 +1,15 @@
 "use client";
 
+import { getRoleFromHeaders } from "@/actions/auth";
 import { dashBoardMenu } from "@/config/shared/dashboard";
+import { userDashBoardMenu } from "@/config/shared/dashboard/dashboard-menu";
 import { cn, getUrl } from "@/lib/utils";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dispatch, FC, Fragment, SetStateAction } from "react";
+import { Dispatch, FC, Fragment, SetStateAction, useEffect, useState } from "react";
 import { v4 } from "uuid";
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
@@ -22,6 +24,18 @@ const ProtectedMobileSideBar: FC<ProtectedMobileSideBarProps> = ({
   setSidebarOpen,
 }) => {
   const currentPath = usePathname();
+  const [role, setRole] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    getRoleFromHeaders()
+      .then(setRole)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <span>Loading...</span>;
+  }
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -78,7 +92,7 @@ const ProtectedMobileSideBar: FC<ProtectedMobileSideBarProps> = ({
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
-                  <Link
+                  {/* <Link
                     href={getUrl()}
                     className="flex h-16 shrink-0 items-center"
                   >
@@ -90,12 +104,35 @@ const ProtectedMobileSideBar: FC<ProtectedMobileSideBarProps> = ({
                       width={40}
                       priority
                     />
-                  </Link>
-                  <nav className="flex flex-1 flex-col">
+                  </Link> */}
+                  <nav className="flex mt-4 flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
-                          {dashBoardMenu.map((menu) => (
+                          {(role==='admin'||role==='editor') ? dashBoardMenu.map((menu) => (
+                            <li key={v4()}>
+                              <Link
+                                href={menu.slug || ""}
+                                className={cn(
+                                  currentPath === menu.slug
+                                    ? "bg-gray-50 text-orange-600"
+                                    : "text-gray-700 hover:bg-gray-50 hover:text-orange-600",
+                                  "group flex gap-x-3 rounded-md p-2 font-sans text-sm font-semibold leading-6",
+                                )}
+                              >
+                                <menu.icon
+                                  className={cn(
+                                    currentPath === menu.slug
+                                      ? "text-orange-600"
+                                      : "text-gray-400 group-hover:text-orange-600",
+                                    "h-6 w-6 shrink-0 font-sans",
+                                  )}
+                                  aria-hidden="true"
+                                />
+                                {menu.title}
+                              </Link>
+                            </li>
+                          )) : userDashBoardMenu.map((menu) => (
                             <li key={v4()}>
                               <Link
                                 href={menu.slug || ""}

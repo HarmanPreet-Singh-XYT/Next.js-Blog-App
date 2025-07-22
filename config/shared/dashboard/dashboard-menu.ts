@@ -10,5 +10,9 @@ const dashBoardMenu: DashBoardType[] = [
   dashBoardBookMark,
   dashBoardSettings,
 ];
+export const userDashBoardMenu: DashBoardType[] = [
+  dashBoardBookMark,
+  dashBoardSettings
+];
 
 export default dashBoardMenu;

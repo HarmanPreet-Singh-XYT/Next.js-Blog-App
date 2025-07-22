@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
 
     // Check if user is authenticated for protected routes
-    if (pathname.startsWith('/editor') || pathname.startsWith('/settings') || pathname.startsWith('/bookmarks')) {
+    if (pathname.startsWith('/editor') || pathname.startsWith('/bookmarks')) {
       if (error || !session?.user) {
         // Not logged in — redirect to login
         const url = request.nextUrl.clone();
@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
       }
 
       // Additional role check for editor and settings routes
-      if (pathname.startsWith('/editor') || pathname.startsWith('/settings')) {
+      if (pathname.startsWith('/editor')) {
         const role = session.user.user_metadata?.role || session.user.app_metadata?.role;
 
         if (role !== 'admin' && role !== 'editor') {
@@ -31,8 +31,23 @@ export async function middleware(request: NextRequest) {
         }
       }
     }
+    const role = session?.user?.user_metadata?.role || session?.user?.app_metadata?.role;
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-user-role', role || 'guest');
 
-    return response;
+    // IMPORTANT: Create a new response with the modified headers
+    const newResponse = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+
+    // Copy cookies from the supabase response to maintain session
+    response.cookies.getAll().forEach((cookie) => {
+      newResponse.cookies.set(cookie);
+    });
+
+    return newResponse;
   } catch (e) {
     console.error('Middleware error:', e);
     // Return next response if Supabase client creation fails

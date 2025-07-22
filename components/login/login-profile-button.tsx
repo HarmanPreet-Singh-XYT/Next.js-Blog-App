@@ -21,10 +21,12 @@ import { FC } from "react";
 
 interface LoginProfileButtonProps {
   profileImageUrl?: string;
+  role:string;
 }
 
 const LoginProfileButton: FC<LoginProfileButtonProps> = ({
   profileImageUrl,
+  role
 }) => {
   const supabase = createClient();
   const router = useRouter();
@@ -55,7 +57,7 @@ const LoginProfileButton: FC<LoginProfileButtonProps> = ({
           />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 font-sans">
-          <Link
+          {(role==="admin"||role==="editor") && <><Link
             href={dashBoardPost.slug || ""}
             className="group inline-flex w-full items-center rounded-md bg-white px-3 py-1.5 hover:bg-gray-100"
           >
@@ -64,7 +66,7 @@ const LoginProfileButton: FC<LoginProfileButtonProps> = ({
               {dashBoardPost.title}
             </span>
           </Link>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator /></>}
 
           <Link
             href={dashBoardBookMark.slug || ""}
@@ -77,7 +79,7 @@ const LoginProfileButton: FC<LoginProfileButtonProps> = ({
           </Link>
           <DropdownMenuSeparator />
 
-          <Link
+          {(role==="admin"||role==="editor") && <><Link
             href={dashBoardSettings.slug || ""}
             className="group inline-flex w-full items-center rounded-md bg-white px-3 py-1.5 hover:bg-gray-100"
           >
@@ -86,7 +88,7 @@ const LoginProfileButton: FC<LoginProfileButtonProps> = ({
               {dashBoardSettings.title}
             </span>
           </Link>
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator /></>}
 
           <button
             onClick={signOut}

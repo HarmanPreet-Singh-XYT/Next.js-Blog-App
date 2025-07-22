@@ -7,56 +7,44 @@ import {
 } from "@/icons/socials";
 import { FooterType } from "@/types";
 import { default as mainCategoryConfig } from "./main-category-config";
+import { Linkedin, XIcon } from "lucide-react";
 
 const mainFooterConfig: FooterType = {
   categories: mainCategoryConfig,
   pages: [
     {
       title: "Home",
-      slug: "/",
+      slug: "https://harmanita.com",
     },
     {
-      title: "About",
-      slug: "/about",
-    },
-    {
-      title: "Docs",
-      slug: "/docs",
-    },
-    {
-      title: "Changelogs",
-      slug: "/changelogs",
+      title: "Services",
+      slug: "https://harmanita.com/services",
     },
     {
       title: "Contact",
-      slug: "/contact",
+      slug: "https://harmanita.com/contact-us",
     },
   ],
 
   socials: [
     {
-      name: "Facebook",
-      url: "https://facebook.com",
-      icon: FacebookIcon,
-    },
-    {
       name: "Github",
-      url: "https://github.com/timtbdev",
+      url: "https://github.com/HarmanPreet-Singh-XYT",
       icon: GithubIcon,
     },
     {
-      name: "Instagram",
-      url: "https://instagram.com",
-      icon: InstagramIcon,
+      name: "LinkedIn",
+      url: "https://www.linkedin.com/in/harman-developer/",
+      icon: Linkedin,
     },
     {
-      name: "Twitter",
-      url: "https://twitter.com/timtbdev",
-      icon: TwitterIcon,
+      name: "X",
+      url: "https://x.com/harmanpreet277",
+      icon: XIcon,
     },
     {
       name: "Youtube",
-      url: "https://youtube.com",
+      url: "https://www.youtube.com/@HarmanDeveloper",
       icon: YoutubeIcon,
     },
   ],
