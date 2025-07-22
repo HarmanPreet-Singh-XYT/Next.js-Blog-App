@@ -42,13 +42,27 @@ const PostsPage: FC<PostsPageProps> = async ({ searchParams }) => {
   if (!data || error || !data.length) {
     notFound;
   }
+  const formattedData = (data || []).map((post) => ({
+    author_id: post.author_id,
+    category_id: post.category_id,
+    content: post.content,
+    created_at: post.created_at ?? "", // fallback to empty string
+    description: post.description,
+    id: post.id,
+    image: post.image,
+    slug: post.slug ?? null,
+    status: post.published ? "Published" : "Draft", // derive status
+    title: post.title ?? null,
+    updated_at: post.updated_at,
+  }));
+
   return (
     <>
       <div className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
         {data?.length && data?.length > 0 ? (
           <>
             <PostTableTitle />
-            <DataTable data={data ? data : []} columns={columns} />
+            <DataTable data={formattedData || []} columns={columns} />
           </>
         ) : (
           <PostTableEmpty />
