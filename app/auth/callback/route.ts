@@ -1,4 +1,4 @@
-import { getUrl } from "@/lib/utils";
+import { getUrl, removeSpacesAndLowercase } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -19,6 +19,29 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
       // URL to redirect to after sign in process completes
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        // Check if profile exists
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', user.id)
+          .single();
+        
+        // Create profile if it doesn't exist
+        if (!profile) {
+          await supabase.from('profiles').insert({
+            id: user.id,
+            full_name: user.user_metadata?.full_name,
+            avatar_url: user.user_metadata?.avatar_url,
+            username: removeSpacesAndLowercase(user.user_metadata?.name),
+            updated_at: new Date().toISOString(),
+          });
+        }
+      }
+
+
       return NextResponse.redirect(redirect ? redirect : requestUrl.origin);
     }
   }

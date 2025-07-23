@@ -88,3 +88,9 @@ export function getUrlFromString(str: string) {
     return null;
   }
 }
+// In your @/lib/utils file
+
+export function removeSpacesAndLowercase(str: string | undefined | null): string {
+  if (!str || typeof str !== 'string') return '';
+  return str.trim().replace(/\s+/g, '').toLowerCase();
+}
