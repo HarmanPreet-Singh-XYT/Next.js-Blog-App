@@ -253,7 +253,6 @@ export default async function PostPage({ params }: PostPageProps) {
     }
 
     const { post, comments, readTime, isBookmarked, userSession } = postData;
-
     // Construct the post URL
     const postUrl = `${getUrl()}/posts/${post.slug}`;
 

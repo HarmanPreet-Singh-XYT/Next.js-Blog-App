@@ -46,14 +46,14 @@ export const BlogDetailHeader = ({data,date}:{data:PostData,date:string})=>{
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
               <Image
-                src={data.userSession.profileImage as string} 
-                alt={data.userSession.username || "Avatar"}
+                src={data.post.profiles.avatar_url as string} 
+                alt={data.post.profiles.full_name || "Avatar"}
                 width={42}
                 height={42}
                 className="rounded-full border-2 border-emerald-500"
               />
               <div>
-                <h3 className="font-medium text-lg">{data.userSession.username}</h3>
+                <h3 className="font-medium text-lg">{data.post.profiles.full_name}</h3>
                 <p className="text-gray-400 text-sm">{"Author"}</p>
               </div>
             </div>

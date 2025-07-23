@@ -218,7 +218,7 @@ export const BlogDetailComments = ({comments,post,user}:{comments:CommentWithPro
           {showComments && (
               <div>
                 {
-                    user ? <DetailPostCommentForm postId={post.id!.toString()} userId={user.userId!.toString()} /> : <DetailPostSignInToComment />
+                    user.userId ? <DetailPostCommentForm postId={post.id!.toString()} userId={user.userId!.toString()} /> : <DetailPostSignInToComment />
                 }
 
               {/* Comments List */}
