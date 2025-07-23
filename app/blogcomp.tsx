@@ -222,7 +222,7 @@ export const BlogDetailComments = ({comments,post,user}:{comments:CommentWithPro
                 }
 
               {/* Comments List */}
-              <div className="space-y-6">
+              <div id="comments" className="space-y-6">
                 {comments.map((comment) => (
                   <div key={comment.id} className="border-l-2 border-gray-700 pl-6">
                     <div className="flex items-start gap-4">

@@ -5,7 +5,6 @@ import { GithubIcon, GoogleIcon, LoadingDots } from "@/icons";
 import { getUrl } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -75,9 +74,9 @@ const LoginSection: React.FC<LoginSectionProps> = ({ setOpen }) => {
 
   return (
     <>
-      <div className="mx-auto w-full justify-center rounded-md border border-black/5 bg-gray-50 align-middle shadow-md">
-        <div className="flex flex-col items-center justify-center space-y-3 border-b px-4 py-6 pt-8 text-center">
-          <a href="https://ub.cafe">
+      <div className="mx-auto w-full justify-center rounded-md border border-gray-800 bg-gray-900 align-middle shadow-xl">
+        <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-800 px-4 py-6 pt-8 text-center">
+          {/* <a href="https://ub.cafe">
             <Image
               src="/images/logo.png"
               alt="Logo"
@@ -86,25 +85,25 @@ const LoginSection: React.FC<LoginSectionProps> = ({ setOpen }) => {
               height={64}
               priority
             />
-          </a>
-          <h3 className="font-display text-2xl font-bold">
+          </a> */}
+          <h3 className="font-display text-2xl font-bold text-white">
             {sharedLoginConfig.title}
           </h3>
         </div>
 
         {/* Sign in buttons with Social accounts */}
-        <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
+        <div className="flex flex-col space-y-4 bg-gray-900 px-4 py-8 md:px-16">
           <button
             disabled={signInGoogleClicked}
             className={`${
               signInGoogleClicked
-                ? "cursor-not-allowed border-gray-200 bg-gray-100"
-                : "border border-gray-200 bg-white text-black hover:bg-gray-50"
-            } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
+                ? "cursor-not-allowed border-gray-700 bg-gray-800 text-gray-500"
+                : "border border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
+            } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none focus:ring-2 focus:ring-gray-600`}
             onClick={() => signInWithGoogle()}
           >
             {signInGoogleClicked ? (
-              <LoadingDots color="#808080" />
+              <LoadingDots color="#9CA3AF" />
             ) : (
               <>
                 <GoogleIcon className="h-5 w-5" />
@@ -117,13 +116,13 @@ const LoginSection: React.FC<LoginSectionProps> = ({ setOpen }) => {
             disabled={signInGithubClicked}
             className={`${
               signInGithubClicked
-                ? "cursor-not-allowed border-gray-200 bg-gray-100"
-                : "border border-gray-200 bg-white text-black hover:bg-gray-50"
-            } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
+                ? "cursor-not-allowed border-gray-700 bg-gray-800 text-gray-500"
+                : "border border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
+            } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none focus:ring-2 focus:ring-gray-600`}
             onClick={() => signInWithGitHub()}
           >
             {signInGithubClicked ? (
-              <LoadingDots color="#808080" />
+              <LoadingDots color="#9CA3AF" />
             ) : (
               <>
                 <GithubIcon className="h-5 w-5" />
