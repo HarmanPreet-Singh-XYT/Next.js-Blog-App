@@ -8,7 +8,7 @@ import {
   DetailPostFloatingBar,
 } from "@/components/detail/post";
 import { DetailPostShareButton } from "@/components/detail/post/buttons";
-import { getMinutes } from "@/lib/utils";
+import { getMinutes, shimmer, toBase64 } from "@/lib/utils";
 import {
   CommentWithProfile,
   PostWithCategoryWithProfile,
@@ -41,6 +41,19 @@ export const BlogDetailHeader = ({data,date}:{data:PostData,date:string})=>{
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             {data.post.title}
           </h1>
+          <div className="relative my-8 flex justify-center w-full">
+            <Image
+              src={data.post.image as string}
+              alt={data.post.title as string}
+              width={712}
+              height={400}
+              className="h-[400px] rounded-2xl bg-gray-100 object-cover"
+              placeholder={`data:image/svg+xml;base64,${toBase64(
+                shimmer(712, 400),
+              )}`}
+            />
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
+          </div>
           
           {/* Author & Meta Info */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">

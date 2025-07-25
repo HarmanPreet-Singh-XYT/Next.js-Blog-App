@@ -273,7 +273,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <div className="relative">
+      {/* <div className="relative">
         <Image 
           src={post.image as string} 
           alt={post.title as string}
@@ -282,8 +282,8 @@ export default async function PostPage({ params }: PostPageProps) {
           className="w-full h-96 object-cover"
         />
         <div className="absolute inset-0 bg-black/50"></div>
-      </div>
-
+      </div> */}
+      <div className="h-28"></div>
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
         {/* Article Header */}
